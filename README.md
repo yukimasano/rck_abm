@@ -64,4 +64,6 @@ optional arguments:
 ```
   ## Evaluating it
   Show basic trajectory via: 
-  `python3 analysis/show_trajectory.py --path test_output/_TFC_N500_d10_tau500.0_tmax20_al66_pf0traj.pkl`
+```
+python3 analysis/show_trajectory.py --path test_output/_TFC_N500_d10_tau500.0_tmax20_al66_pf0traj.pkl
+```
