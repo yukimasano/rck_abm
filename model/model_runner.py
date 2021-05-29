@@ -40,7 +40,7 @@ def runner(args):
         net_abbr = "_TFC_N%s" % (args.nagents)
 
     n = len(net.nodes())
-    print("Using %s agents." % n, flush=True)
+    print("Simulating %s households." % n, flush=True)
 
     # set-up individual attributes:
     capital = np.ones(n) * args.K  # starting capital
@@ -50,7 +50,6 @@ def runner(args):
         "tau": args.tau,
         "d": args.d,
         "alpha": args.alpha,
-        "seq": args.sequential,
         "delta_s": args.delta_s,
         "w_future": args.w_future,
         "phi": args.phi,
@@ -61,14 +60,16 @@ def runner(args):
         "rfixed": args.rfixed,
         "sfixed": args.sfixed,
         "pexplore": args.pexplore,
+        "e_trajectory_output": args.micro,
     }
-    input_parameters = {key: val for key, val in input_parameters.items() if val}
+    input_parameters = {key: val for key, val in input_parameters.items() if val is not None}
+    print("Specified input parameters: ", input_parameters)
 
     init_conditions = (net, savings_rates, capital)
 
     model = SavingsCoreBest(*init_conditions, **input_parameters)
-    # Turn off economic trajectory
-    model.e_trajectory_output = False
+    # Turn
+    model.e_trajectory_output = args.micro
     model.macro_trajectory_output = True
 
     # Turn on debugging
@@ -85,7 +86,7 @@ def runner(args):
     # saving
     save_file = os.path.join(
         out_loc,
-        "%s_d%s_tau%s_tmax%s_al%s_pf%s"
+        "%s_d%s_tau%s_tmax%s_al%s_pf%s_rf%s"
         % (
             net_abbr,
             int(model.d * 100),
@@ -93,6 +94,7 @@ def runner(args):
             args.tmax,
             int(model.alpha * 100),
             int(model.pfixed * 100),
+            int(model.rfixed * 100)
         ),
     )
 
@@ -104,13 +106,14 @@ def runner(args):
             os.makedirs(out_loc)
         except:
             pass
-        trajectory.to_pickle(save_file + "traj.pkl")
-        with open(save_file + "final.pkl", "wb") as dumpfile:
+        trajectory.to_pickle(save_file + "--traj.pkl")
+        with open(save_file + "--final.pkl", "wb") as dumpfile:
             cp.dump(final, dumpfile)
 
         if args.micro:
-            micro_trajectory.to_pickle(save_file + "indiv_traj.pkl")
+            micro_trajectory.to_pickle(save_file + "--indiv_traj.pkl")
 
     if args.micro:
         return final, trajectory, micro_trajectory
+
     return final, trajectory

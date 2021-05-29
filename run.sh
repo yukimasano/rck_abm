@@ -1,22 +1,22 @@
 #!/bin/bash
 # example run script.
 
-EXPDIR='../test_output'
+EXPDIR='test_output/sweep1'
 mkdir -p ${EXPDIR}
 
-for top in FC
+pfixed=0
+top='FC'
+for n in 500 600
 do
-  for n in 3000 5000
+  for tau in 50 100 1000
   do
-    for pfixed in 0
-    do
-      python3 main.py --nagents ${n} \
-                       --top ${top} \
-                       --k 20 \
-                       --micro \
-                       --d 0.2 \
-                       --pfixed ${pfixed} \
-                       --saveloc ${EXPDIR} > ${EXPDIR}/alphafix_log_${top}_${n}_with_rational_households.txt &
-    done
+    python3 main.py --nagents ${n} \
+                     --top ${top} \
+                     --k 20 \
+                     --micro \
+                     --d 0.2 \
+                     --tau ${tau} \
+                     --pfixed ${pfixed} \
+                     --saveloc ${EXPDIR} > ${EXPDIR}/log_file_${top}_${n}_${tau}_with_rational_households.txt &
   done
 done

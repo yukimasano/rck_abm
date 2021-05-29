@@ -45,7 +45,6 @@ optional arguments:
                         (default:0)
   --w-future W_FUTURE   Weight of future prediction in agents decision making
                         (default:0)
-  --sequential          agents take sequential turns (default: off)
   --saveloc SAVELOC     where to save output
   --micro               whether to store micro history (default: False)
   --dontsave            whether or not to store data in separate files for
@@ -55,7 +54,7 @@ optional arguments:
   --pfixed PFIXED       Expected fraction of households with fixed savings
                         rate (default: 0)
   --rfixed RFIXED       Discount rate in [1/yr] of households with fixed
-                        savings rate (default: 0.05)
+                        savings rate (default: 0)
   --sfixed SFIXED       Savings rate of fixed households (default: alpha * d /
                         (rfixed + d))
   --pexplore PEXPLORE   probability to explore random savings rate instead of
@@ -65,5 +64,5 @@ optional arguments:
   ## Evaluating it
   Show basic trajectory via: 
 ```
-python3 analysis/show_trajectory.py --path test_output/_TFC_N500_d10_tau500.0_tmax20_al66_pf0traj.pkl
+python3 analysis/show_trajectory.py --path test_output/_TFC_N500_d10_tau500.0_tmax20_al66_pf0--traj.pkl
 ```

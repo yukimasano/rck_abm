@@ -28,10 +28,9 @@ class SavingsCoreBest:
             w_future=0.0,
             # for fixed households:
             pfixed=0.0,   # expected fraction of households with fixed savings rate
-            rfixed=0.05,  # their discount rate, defaults to 5%/yr
-                          # their savings rate, defaults to original RCK optimal
+            rfixed=0.0,   # their discount rate used for choosing their savings rate
+            sfixed=None,  # their savings rate, defaults to original RCK optimal
                           # savings rate given discount rate rfixed
-            sfixed=None,
             # exploration:
             pexplore=0.0,
     ):
@@ -59,12 +58,6 @@ class SavingsCoreBest:
         # Step counter for output
         self.steps = 0
 
-        # variable to set if the model converged to some final state.
-        self.converged = False
-        # safes the system time at which consensus is reached
-        self.convergence_time = float("NaN")
-        # if not converged: opinion state at t_max
-        self.convergence_state = -1
 
         # list to save e_trajectory of output variables
         self.e_trajectory = []
@@ -118,7 +111,6 @@ class SavingsCoreBest:
         # total capital (supply)
         self.K = self.capital.sum()
         # total labor (supply)
-        # old (before 31.1.2020:) self.P = np.random.normal(float(P), (float(P)/self.n)*self.phi, self.n)
         self.P = np.random.normal(P, P * self.phi, self.n)
         self.Psum = sum(self.P)
         while any(self.P < 0):
@@ -167,15 +159,13 @@ class SavingsCoreBest:
 
     def run(self, t_max=200.0):
         """
-        run model for t<t_max or until consensus is reached
+        run model for t<t_max
 
         Parameter
         ---------
         t_max : float
             The maximum time the system is integrated [Default: 100]
-            before run() exits. If the model reaches consensus, or is
-            unable to find further update candidated, it ends immediately
-
+            before run() exits.
         """
         for t_max_i in tqdm(np.linspace(0, t_max, 1000)):
             while self.t < t_max_i:
@@ -185,8 +175,7 @@ class SavingsCoreBest:
                 # 2 integrate economic model until t=update_time:
                 self.update_economy(update_time)
 
-                # 3 update opinion formation in case,
-                # update candidate was found:
+                # 3 update savings rate
                 self.update_savings_rate(candidate, neighbor)
 
             # save final state to dictionary
@@ -234,9 +223,7 @@ class SavingsCoreBest:
             the last entry is the change in total population
         """
 
-        capital = x0[
-                  : self.n
-                  ]  # np.where(x0[0:self.n] > 0, x0[0:self.n], np.full(self.n, self.epsilon.eps))
+        capital = x0[:self.n]  # np.where(x0[0:self.n] > 0, x0[0:self.n], np.full(self.n, self.epsilon.eps))
 
         P = self.Psum
         K = capital.sum()
@@ -304,7 +291,7 @@ class SavingsCoreBest:
             plt.title("t = %.1f" % self.t)
             self.fig.canvas.draw()
             self.fig.canvas.flush_events()
-            plt.savefig(self.movie + "_%05d.png" % self.figno, quality=1)
+            plt.savefig(str(self.movie) + f"_{self.figno:5d}.png", quality=1)
             self.figno += 1
             self.lastframet = self.t
 
@@ -359,7 +346,7 @@ class SavingsCoreBest:
         # load neighborhood of household i
         neighbors = list(
             self.G.neighbors(candidate)
-        )  # self.neighbors[:, candidate].nonzero()[0]
+        )
 
         # choose best neighbor of candidate
         func_vals = (1.0 - self.savings_rate[neighbors]) * self.income[neighbors]

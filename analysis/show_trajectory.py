@@ -22,7 +22,7 @@ fig.set_figwidth(20)
 fig.set_figheight(8)
 
 # print(data.index)
-subset = (data.index > args.tmin) & (data.index < args.tmax)
+subset = (data.index > args.tmin) & (data.index < min([args.tmax, data.index.values.max()]))
 data = data.iloc[subset]
 data['capital'].plot(ax=axes[0])
 data['consumption'].plot(ax=axes[1])
@@ -31,6 +31,5 @@ data['consumption'].plot(ax=axes[1])
 variables = ['total capital', 'total consumption', 'economy wide savings rate']
 
 for i, ax in enumerate(axes):
-    ax.set_xlim([args.tmin, args.tmax])
     ax.set_ylabel(variables[i])
 plt.show()
