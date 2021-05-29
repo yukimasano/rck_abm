@@ -7,6 +7,9 @@ As described in our paper [_Emergent inequality and endogenous dynamics in a sim
 Install environment:
 `conda env create -f environment.yml`
 
+or if you're on a Mac:
+`conda env create -f environment_mac.yml`
+
 Activate environment:
 `conda activate rck_abm`
 
@@ -69,9 +72,12 @@ python3 analysis/show_trajectory.py --path test_output/_TFC_N500_d10_tau500.0_tm
 
   Show periodograms and trajectory
 ```
-python3 analysis/periodogram.py test_output/_TFC_N500_d10_tau500.0_tmax20_al66_pf0--traj.pkl
+python3 analysis/periodogram.py test_output/_TFC_N500_d10_tau500.0_tmax20_al66_pf0_rf5--traj.pkl
 ```
 or use the demo command provided (this will download a trajectory file of size 144MB)
 ```
 python3 analysis/periodogram.py demo
 ```
+
+## Running experiments on a cluster
+Further install MPI4py: `pip install mpi4py`
