@@ -1,6 +1,6 @@
 # Ramsey-Cass-Koopman Agent-Based Model.
 
-As described in our paper [_Emergent inequality and endogenous dynamics in a simple behavioral macroeconomic model_](https://arxiv.org/abs/1907.02155)
+As described in our paper [_Emergent inequality and endogenous dynamics in a simple behavioral macroeconomic model_](https://arxiv.org/abs/1907.02155) by Yuki M. Asano, Jakob J. Kolb, Jobst Heitzig, J. Doyne Farmer.
 
 
 ## Installation
