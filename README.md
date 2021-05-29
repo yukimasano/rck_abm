@@ -66,3 +66,12 @@ optional arguments:
 ```
 python3 analysis/show_trajectory.py --path test_output/_TFC_N500_d10_tau500.0_tmax20_al66_pf0--traj.pkl
 ```
+
+  Show periodograms and trajectory
+```
+python3 analysis/periodogram.py test_output/_TFC_N500_d10_tau500.0_tmax20_al66_pf0--traj.pkl
+```
+or use the demo command provided (this will download a trajectory file of size 144MB)
+```
+python3 analysis/periodogram.py demo
+```
